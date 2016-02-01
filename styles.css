@@ -1,0 +1,32 @@
+#color-label {
+  margin-left: 15px;
+  position: relative;
+  height: 20px;
+  width: 40px;
+  border: none;
+}
+#color-picker {
+  position: relative;
+  left: 60px;
+  top: -22px;
+  background-color: white;
+  height: 150px;
+  width: 175px;
+  border: solid 1px #ccc;
+  padding: 5px;
+  opacity: 0;
+  transition: all 0.3s;
+}
+canvas:hover {
+  cursor: crosshair;
+}
+#color-strip {
+  margin-left: 5px;
+}
+p {
+  margin: 20px 0 0 70px;
+}
+
+h1 {
+  color: red;
+}
