@@ -129,11 +129,8 @@ var ColorPicker = React.createClass({
     var ctxS = canvasS.getContext('2d');
     var idB = this.props.id + 'ctxB';
     var idS = this.props.id + 'ctxS';
-
     contexts.push({idB: ctxB, idS: ctxS});
-
     self.props.setContexts(ctxB, ctxS);
-
     contexts.forEach(function(item) {
       self.props.blockFill(item.idB);
       self.props.stripFill(item.idS);
@@ -161,14 +158,3 @@ var ColorPicker = React.createClass({
     );
   }
 });
-
-var App = React.createClass({
-  render: function() {
-    return <ColorPickerContainer />;
-  }
-});
-
-ReactDOM.render(
-  <App />,
-  document.getElementById('color-picker-container')
-);
