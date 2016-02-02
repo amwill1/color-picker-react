@@ -1,7 +1,8 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
+var ColorLabel = require('./label');
+var ColorPicker = require('./picker');
 
-var contexts = [];
 var wB = 150;
 var hB = 150;
 var wS = 20;
@@ -12,12 +13,12 @@ var rgbColor = 'rgb(0,0,0)';
 var ColorPickerContainer = React.createClass({
   getInitialState: function() {
     return {
-      isPickerVisible: true,
+      isActive: true,
       color: rgbColor
     };
   },
   togglePicker: function(id) {
-    this.setState({isPickerVisible: !this.state.isPickerVisible});
+    this.setState({isActive: !this.state.isActive});
   },
   blockFill: function() {
     this.ctxB.rect(0, 0, wB, hB);
@@ -80,11 +81,11 @@ var ColorPickerContainer = React.createClass({
   render: function() {
     return (
       <div>
-        <ColorLabel isChecked={this.state.isPickerVisible}
+        <ColorLabel isChecked={this.state.isActive}
                     color={this.state.color}
                     handleClick={this.togglePicker}
                     id={this.props.id} />
-        <ColorPicker isVisible={this.state.isPickerVisible}
+        <ColorPicker isVisible={this.state.isActive}
                      color={this.state.color}
                      setContexts={this.setContexts}
                      mouseDownBlock={this.mouseDownBlock}
@@ -93,68 +94,15 @@ var ColorPickerContainer = React.createClass({
                      clickStrip={this.clickStrip}
                      blockFill={this.blockFill}
                      stripFill={this.stripFill}
-                     id={this.props.id} />
+                     id={this.props.id}
+                     wB={wB}
+                     hB={hB}
+                     wS={wS}
+                     hS={hS}
+                     rgbColor={rgbColor}  />
       </div>
     );
   }
 });
 
-var ColorLabel = React.createClass({
-  handleClick: function() {
-    this.props.handleClick();
-  },
-  render: function() {
-    var styles = {
-      backgroundColor: this.props.color
-    };
-    return(
-      <div>
-        <button type='button' id='color-label' className={this.props.id} style={styles} onClick={this.props.handleClick.bind(this, this.props.id)}  />
-      </div>
-    );
-  }
-});
-
-var ColorPicker = React.createClass({
-  getInitialState: function() {
-    return {
-      color: rgbColor
-    }
-  },
-  componentDidMount: function() {
-    var self = this;
-    var canvasB = this.refs.canvasBlock;
-    var canvasS = this.refs.canvasStrip;
-    var ctxB = canvasB.getContext('2d');
-    var ctxS = canvasS.getContext('2d');
-    var idB = this.props.id + 'ctxB';
-    var idS = this.props.id + 'ctxS';
-    contexts.push({idB: ctxB, idS: ctxS});
-    self.props.setContexts(ctxB, ctxS);
-    contexts.forEach(function(item) {
-      self.props.blockFill(item.idB);
-      self.props.stripFill(item.idS);
-    });
-  },
-  render: function(e) {
-    var styles = {
-      opacity: this.props.isVisible ? '1' : '0'
-    };
-    return(
-      <div id="color-picker" style={styles} className={this.props.id}>
-        <canvas id="color-block"
-                height={hB}
-                width={wB}
-                onMouseDown={this.props.mouseDownBlock}
-                onMouseMove={this.props.mouseMoveBlock}
-                onMouseUp={this.props.mouseUpBlock}
-                ref="canvasBlock"></canvas>
-        <canvas id="color-strip"
-                height={hS}
-                width={wS}
-                onClick={this.props.clickStrip}
-                ref="canvasStrip"></canvas>
-      </div>
-    );
-  }
-});
+module.exports = ColorPickerContainer;

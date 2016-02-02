@@ -1,18 +1,14 @@
-var contexts = [];
-var wB = 150;
-var hB = 150;
-var wS = 20;
-var hS = 150;
-var drag = false;
-var rgbColor = 'rgb(0,0,0)';
+var React = require('react');
+var ReactDOM = require('react-dom');
 
 var ColorPicker = React.createClass({
   getInitialState: function() {
     return {
-      color: rgbColor
+      color: this.props.rgbColor
     }
   },
   componentDidMount: function() {
+    var contexts = [];
     var self = this;
     var canvasB = this.refs.canvasBlock;
     var canvasS = this.refs.canvasStrip;
@@ -34,18 +30,20 @@ var ColorPicker = React.createClass({
     return(
       <div id="color-picker" style={styles} className={this.props.id}>
         <canvas id="color-block"
-                height={hB}
-                width={wB}
+                height={this.props.hB}
+                width={this.props.wB}
                 onMouseDown={this.props.mouseDownBlock}
                 onMouseMove={this.props.mouseMoveBlock}
                 onMouseUp={this.props.mouseUpBlock}
                 ref="canvasBlock"></canvas>
         <canvas id="color-strip"
-                height={hS}
-                width={wS}
+                height={this.props.hS}
+                width={this.props.wS}
                 onClick={this.props.clickStrip}
                 ref="canvasStrip"></canvas>
       </div>
     );
   }
 });
+
+module.exports = ColorPicker;
