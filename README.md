@@ -1,5 +1,5 @@
 # react-color-picker
 
-A canvas color picker build with ReactJS
+A canvas RGB color picker built with ReactJS.
 
 ![picker image](./picker.png)
