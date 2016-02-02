@@ -1,3 +1,6 @@
+var React = require('react');
+var ReactDOM = require('react-dom');
+
 var contexts = [];
 var wB = 150;
 var hB = 150;
@@ -165,7 +168,7 @@ var App = React.createClass({
   }
 });
 
-React.render(
+ReactDOM.render(
   <App />,
   document.getElementById('color-picker-container')
 );
