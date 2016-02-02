@@ -161,13 +161,7 @@ var ColorPicker = React.createClass({
 
 var App = React.createClass({
   render: function() {
-    return (
-      <div>
-        {outputs.map(function(output) {
-         return <ColorPickerContainer />
-        })}
-      </div>
-    );
+    return <ColorPickerContainer />;
   }
 });
 
