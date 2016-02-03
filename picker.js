@@ -1,46 +1,54 @@
 var React = require('react');
-var ReactDOM = require('react-dom');
 
 var ColorPicker = React.createClass({
-  getInitialState: function() {
-    return {
-      color: this.props.rgbColor
-    }
+  propTypes: {
+    clickStrip: React.PropTypes.func.isRequired,
+    mouseDownBlock: React.PropTypes.func.isRequired,
+    mouseMoveBlock: React.PropTypes.func.isRequired,
+    mouseUpBlock: React.PropTypes.func.isRequired,
+    blockFill: React.PropTypes.func.isRequired,
+    stripFill: React.PropTypes.func.isRequired,
+    setContexts: React.PropTypes.func.isRequired,
+    isVisible: React.PropTypes.bool.isRequired,
+    wB: React.PropTypes.string,
+    wS: React.PropTypes.string,
+    hB: React.PropTypes.string,
+    hS: React.PropTypes.string,
+    id: React.PropTypes.string
   },
-  componentDidMount: function() {
+  componentDidMount: function () {
     var contexts = [];
     var self = this;
     var canvasB = this.refs.canvasBlock;
     var canvasS = this.refs.canvasStrip;
     var ctxB = canvasB.getContext('2d');
     var ctxS = canvasS.getContext('2d');
-    var idB = this.props.id + 'ctxB';
-    var idS = this.props.id + 'ctxS';
-    contexts.push({idB: ctxB, idS: ctxS});
+    contexts.push(ctxB, ctxS);
     self.props.setContexts(ctxB, ctxS);
-    contexts.forEach(function(item) {
-      self.props.blockFill(item.idB);
-      self.props.stripFill(item.idS);
+    contexts.forEach(function (item) {
+      self.props.blockFill(item);
+      self.props.stripFill(item);
     });
   },
-  render: function(e) {
+  render: function (e) {
     var styles = {
-      opacity: this.props.isVisible ? '1' : '0'
+      display: this.props.isVisible ? 'block' : 'none',
+      cursor: this.props.isVisible ? 'crosshair' : 'default'
     };
-    return(
-      <div id="color-picker" style={styles} className={this.props.id}>
-        <canvas id="color-block"
+    return (
+      <div id={this.props.id} style={styles} className={this.props.id}>
+        <canvas id='color-block'
                 height={this.props.hB}
                 width={this.props.wB}
                 onMouseDown={this.props.mouseDownBlock}
                 onMouseMove={this.props.mouseMoveBlock}
                 onMouseUp={this.props.mouseUpBlock}
-                ref="canvasBlock"></canvas>
-        <canvas id="color-strip"
+                ref='canvasBlock'></canvas>
+        <canvas id='color-strip'
                 height={this.props.hS}
                 width={this.props.wS}
                 onClick={this.props.clickStrip}
-                ref="canvasStrip"></canvas>
+                ref='canvasStrip'></canvas>
       </div>
     );
   }

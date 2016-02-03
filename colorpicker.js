@@ -1,5 +1,4 @@
 var React = require('react');
-var ReactDOM = require('react-dom');
 var ColorLabel = require('./label');
 var ColorPicker = require('./picker');
 
@@ -8,23 +7,28 @@ var hB = 150;
 var wS = 20;
 var hS = 150;
 var drag = false;
-var rgbColor = 'rgb(0,0,0)';
+var rgbColor;
 
 var ColorPickerContainer = React.createClass({
-  getInitialState: function() {
+  propTypes: {
+    isVisible: React.PropTypes.bool,
+    defaultColor: React.PropTypes.string,
+    id: React.PropTypes.string
+  },
+  getInitialState: function () {
     return {
-      isActive: true,
-      color: rgbColor
+      isActive: this.props.isVisible || false,
+      color: this.props.defaultColor || 'rgb(0, 0, 0)'
     };
   },
-  togglePicker: function(id) {
+  togglePicker: function (id) {
     this.setState({isActive: !this.state.isActive});
   },
-  blockFill: function() {
+  blockFill: function () {
     this.ctxB.rect(0, 0, wB, hB);
     this.gradientBlock();
   },
-  stripFill: function() {
+  stripFill: function () {
     this.ctxS.rect(0, 0, wS, hS);
     var grd1 = this.ctxS.createLinearGradient(0, 0, 0, hS);
     grd1.addColorStop(0, 'rgb(255, 0, 0)'); // red
@@ -37,8 +41,8 @@ var ColorPickerContainer = React.createClass({
     this.ctxS.fillStyle = grd1;
     this.ctxS.fill();
   },
-  gradientBlock: function() {
-    this.ctxB.fillStyle = rgbColor;
+  gradientBlock: function () {
+    this.ctxB.fillStyle = rgbColor || this.props.defaultColor;
     this.ctxB.fillRect(0, 0, wB, hB);
     var grdWhite = this.ctxB.createLinearGradient(0, 0, wB, 0);
     grdWhite.addColorStop(0, 'rgb(255,255,255)');
@@ -51,40 +55,43 @@ var ColorPickerContainer = React.createClass({
     this.ctxB.fillStyle = grdBlack;
     this.ctxB.fillRect(0, 0, wB, hB);
   },
-  selectColor: function(ctx, e, self) {
+  selectColor: function (ctx, e, self) {
     var x = e.nativeEvent.offsetX;
     var y = e.nativeEvent.offsetY;
     var imageData = ctx.getImageData(x, y, 1, 1).data;
     rgbColor = 'rgb(' + imageData[0] + ',' + imageData[1] + ',' + imageData[2] + ')';
     self.setState({color: rgbColor});
   },
-  clickStrip: function(e) {
+  clickStrip: function (e) {
     this.selectColor(this.ctxS, e, this);
     this.gradientBlock();
   },
-  mouseDownBlock: function(e) {
+  mouseDownBlock: function (e) {
     drag = true;
     this.selectColor(this.ctxB, e, this);
   },
-  mouseMoveBlock: function(e) {
+  mouseMoveBlock: function (e) {
     if (drag) {
       this.selectColor(this.ctxB, e, this);
     }
   },
-  mouseUpBlock: function() {
+  mouseUpBlock: function () {
     drag = false;
   },
-  setContexts: function(ctxB, ctxS) {
+  setContexts: function (ctxB, ctxS) {
     this.ctxB = ctxB;
     this.ctxS = ctxS;
   },
-  render: function() {
+  render: function () {
+    var styles = {
+      position: 'absolute'
+    };
     return (
-      <div>
-        <ColorLabel isChecked={this.state.isActive}
+      <div style={styles}>
+        <ColorLabel isActive={this.state.isActive}
                     color={this.state.color}
                     handleClick={this.togglePicker}
-                    id={this.props.id} />
+                    id='color-label' />
         <ColorPicker isVisible={this.state.isActive}
                      color={this.state.color}
                      setContexts={this.setContexts}
@@ -94,12 +101,12 @@ var ColorPickerContainer = React.createClass({
                      clickStrip={this.clickStrip}
                      blockFill={this.blockFill}
                      stripFill={this.stripFill}
-                     id={this.props.id}
+                     id='color-picker'
                      wB={wB}
                      hB={hB}
                      wS={wS}
                      hS={hS}
-                     rgbColor={rgbColor}  />
+                     key={this.props.id} />
       </div>
     );
   }
