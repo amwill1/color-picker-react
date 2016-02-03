@@ -1,18 +1,18 @@
 {
-  "name": "react-color-picker",
+  "name": "color-picker-react",
   "version": "1.0.0",
   "description": "A canvas color picker build with ReactJS",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/amwill1/react-color-picker.git"
+    "url": "git+https://github.com/amwill1/color-picker-react.git"
   },
   "author": "Amanda Williamson",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/amwill1/react-color-picker/issues"
+    "url": "https://github.com/amwill1/color-picker-react/issues"
   },
-  "homepage": "https://github.com/amwill1/react-color-picker#readme",
+  "homepage": "https://github.com/amwill1/color-picker-react#readme",
   "dependencies": {
     "babel": "^6.3.26",
     "babel-preset-react": "^6.3.13",
