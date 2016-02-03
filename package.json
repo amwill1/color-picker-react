@@ -2,7 +2,7 @@
   "name": "color-picker-react",
   "version": "1.1.0",
   "description": "A canvas color picker build with ReactJS",
-  "main": "index.js",
+  "main": "colorpicker.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/amwill1/color-picker-react.git"
