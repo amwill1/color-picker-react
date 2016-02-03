@@ -10,10 +10,10 @@ var ColorPicker = React.createClass({
     stripFill: React.PropTypes.func.isRequired,
     setContexts: React.PropTypes.func.isRequired,
     isVisible: React.PropTypes.bool.isRequired,
-    wB: React.PropTypes.string,
-    wS: React.PropTypes.string,
-    hB: React.PropTypes.string,
-    hS: React.PropTypes.string,
+    wB: React.PropTypes.number,
+    wS: React.PropTypes.number,
+    hB: React.PropTypes.number,
+    hS: React.PropTypes.number,
     id: React.PropTypes.string
   },
   componentDidMount: function () {
