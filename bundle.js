@@ -7,7 +7,35 @@ var App = React.createClass({
   displayName: 'App',
 
   render: function () {
-    return React.createElement(ColorPickerContainer, null);
+    return React.createElement(
+      'div',
+      null,
+      React.createElement(
+        'div',
+        { className: 'picker1' },
+        React.createElement(
+          'h2',
+          null,
+          'Picker 1'
+        ),
+        React.createElement(ColorPickerContainer, { id: 'picker1', defaultColor: 'rgb(255, 0, 0)' }),
+        React.createElement(
+          'p',
+          null,
+          'Lorem ipsum content here'
+        )
+      ),
+      React.createElement(
+        'div',
+        { className: 'picker2' },
+        React.createElement(
+          'h2',
+          null,
+          'Picker 2'
+        ),
+        React.createElement(ColorPickerContainer, { id: 'picker2', defaultColor: 'rgb(0, 0, 255)' })
+      )
+    );
   }
 });
 
@@ -15,7 +43,6 @@ ReactDOM.render(React.createElement(App, null), document.getElementById('color-p
 
 },{"./colorpicker.js":2,"react":160,"react-dom":4}],2:[function(require,module,exports){
 var React = require('react');
-var ReactDOM = require('react-dom');
 var ColorLabel = require('./label');
 var ColorPicker = require('./picker');
 
@@ -24,15 +51,20 @@ var hB = 150;
 var wS = 20;
 var hS = 150;
 var drag = false;
-var rgbColor = 'rgb(0,0,0)';
+var rgbColor;
 
 var ColorPickerContainer = React.createClass({
   displayName: 'ColorPickerContainer',
 
+  propTypes: {
+    isVisible: React.PropTypes.bool,
+    defaultColor: React.PropTypes.string,
+    id: React.PropTypes.string
+  },
   getInitialState: function () {
     return {
-      isActive: true,
-      color: rgbColor
+      isActive: this.props.isVisible || false,
+      color: this.props.defaultColor || 'rgb(0, 0, 0)'
     };
   },
   togglePicker: function (id) {
@@ -56,7 +88,7 @@ var ColorPickerContainer = React.createClass({
     this.ctxS.fill();
   },
   gradientBlock: function () {
-    this.ctxB.fillStyle = rgbColor;
+    this.ctxB.fillStyle = rgbColor || this.props.defaultColor;
     this.ctxB.fillRect(0, 0, wB, hB);
     var grdWhite = this.ctxB.createLinearGradient(0, 0, wB, 0);
     grdWhite.addColorStop(0, 'rgb(255,255,255)');
@@ -97,13 +129,16 @@ var ColorPickerContainer = React.createClass({
     this.ctxS = ctxS;
   },
   render: function () {
+    var styles = {
+      position: 'absolute'
+    };
     return React.createElement(
       'div',
-      null,
-      React.createElement(ColorLabel, { isChecked: this.state.isActive,
+      { style: styles },
+      React.createElement(ColorLabel, { isActive: this.state.isActive,
         color: this.state.color,
         handleClick: this.togglePicker,
-        id: this.props.id }),
+        id: 'color-label' }),
       React.createElement(ColorPicker, { isVisible: this.state.isActive,
         color: this.state.color,
         setContexts: this.setContexts,
@@ -113,25 +148,30 @@ var ColorPickerContainer = React.createClass({
         clickStrip: this.clickStrip,
         blockFill: this.blockFill,
         stripFill: this.stripFill,
-        id: this.props.id,
+        id: 'color-picker',
         wB: wB,
         hB: hB,
         wS: wS,
         hS: hS,
-        rgbColor: rgbColor })
+        key: this.props.id })
     );
   }
 });
 
 module.exports = ColorPickerContainer;
 
-},{"./label":3,"./picker":161,"react":160,"react-dom":4}],3:[function(require,module,exports){
+},{"./label":3,"./picker":161,"react":160}],3:[function(require,module,exports){
 var React = require('react');
-var ReactDOM = require('react-dom');
 
 var ColorLabel = React.createClass({
   displayName: 'ColorLabel',
 
+  propTypes: {
+    handleClick: React.PropTypes.func.isRequired,
+    color: React.PropTypes.string.isRequired,
+    id: React.PropTypes.string,
+    isActive: React.PropTypes.bool
+  },
   handleClick: function () {
     this.props.handleClick();
   },
@@ -142,14 +182,18 @@ var ColorLabel = React.createClass({
     return React.createElement(
       'div',
       null,
-      React.createElement('button', { type: 'button', id: 'color-label', className: this.props.id, style: styles, onClick: this.props.handleClick.bind(this, this.props.id) })
+      React.createElement('button', { type: 'button',
+        id: this.props.id,
+        className: this.props.isActive ? 'active' : '',
+        style: styles,
+        onClick: this.props.handleClick.bind(this, this.props.id) })
     );
   }
 });
 
 module.exports = ColorLabel;
 
-},{"react":160,"react-dom":4}],4:[function(require,module,exports){
+},{"react":160}],4:[function(require,module,exports){
 'use strict';
 
 module.exports = require('react/lib/ReactDOM');
@@ -19090,15 +19134,24 @@ module.exports = require('./lib/React');
 
 },{"./lib/React":28}],161:[function(require,module,exports){
 var React = require('react');
-var ReactDOM = require('react-dom');
 
 var ColorPicker = React.createClass({
   displayName: 'ColorPicker',
 
-  getInitialState: function () {
-    return {
-      color: this.props.rgbColor
-    };
+  propTypes: {
+    clickStrip: React.PropTypes.func.isRequired,
+    mouseDownBlock: React.PropTypes.func.isRequired,
+    mouseMoveBlock: React.PropTypes.func.isRequired,
+    mouseUpBlock: React.PropTypes.func.isRequired,
+    blockFill: React.PropTypes.func.isRequired,
+    stripFill: React.PropTypes.func.isRequired,
+    setContexts: React.PropTypes.func.isRequired,
+    isVisible: React.PropTypes.bool.isRequired,
+    wB: React.PropTypes.string,
+    wS: React.PropTypes.string,
+    hB: React.PropTypes.string,
+    hS: React.PropTypes.string,
+    id: React.PropTypes.string
   },
   componentDidMount: function () {
     var contexts = [];
@@ -19107,22 +19160,21 @@ var ColorPicker = React.createClass({
     var canvasS = this.refs.canvasStrip;
     var ctxB = canvasB.getContext('2d');
     var ctxS = canvasS.getContext('2d');
-    var idB = this.props.id + 'ctxB';
-    var idS = this.props.id + 'ctxS';
-    contexts.push({ idB: ctxB, idS: ctxS });
+    contexts.push(ctxB, ctxS);
     self.props.setContexts(ctxB, ctxS);
     contexts.forEach(function (item) {
-      self.props.blockFill(item.idB);
-      self.props.stripFill(item.idS);
+      self.props.blockFill(item);
+      self.props.stripFill(item);
     });
   },
   render: function (e) {
     var styles = {
-      opacity: this.props.isVisible ? '1' : '0'
+      display: this.props.isVisible ? 'block' : 'none',
+      cursor: this.props.isVisible ? 'crosshair' : 'default'
     };
     return React.createElement(
       'div',
-      { id: 'color-picker', style: styles, className: this.props.id },
+      { id: this.props.id, style: styles, className: this.props.id },
       React.createElement('canvas', { id: 'color-block',
         height: this.props.hB,
         width: this.props.wB,
@@ -19141,7 +19193,7 @@ var ColorPicker = React.createClass({
 
 module.exports = ColorPicker;
 
-},{"react":160,"react-dom":4}],162:[function(require,module,exports){
+},{"react":160}],162:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};

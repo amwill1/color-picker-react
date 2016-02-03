@@ -1,17 +1,26 @@
 var React = require('react');
-var ReactDOM = require('react-dom');
 
 var ColorLabel = React.createClass({
-  handleClick: function() {
+  propTypes: {
+    handleClick: React.PropTypes.func.isRequired,
+    color: React.PropTypes.string.isRequired,
+    id: React.PropTypes.string,
+    isActive: React.PropTypes.bool
+  },
+  handleClick: function () {
     this.props.handleClick();
   },
-  render: function() {
+  render: function () {
     var styles = {
       backgroundColor: this.props.color
     };
-    return(
+    return (
       <div>
-        <button type='button' id='color-label' className={this.props.id} style={styles} onClick={this.props.handleClick.bind(this, this.props.id)}  />
+        <button type='button'
+                id={this.props.id}
+                className={this.props.isActive ? 'active' : ''}
+                style={styles}
+                onClick={this.props.handleClick.bind(this, this.props.id)} />
       </div>
     );
   }
