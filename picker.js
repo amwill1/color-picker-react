@@ -33,7 +33,18 @@ var ColorPicker = React.createClass({
   render: function (e) {
     var styles = {
       display: this.props.isVisible ? 'block' : 'none',
-      cursor: this.props.isVisible ? 'crosshair' : 'default'
+      cursor: this.props.isVisible ? 'crosshair' : 'default',
+      position: 'relative',
+      left: '60px',
+      top: '-22px',
+      backgroundColor: 'white',
+      height: '162px',
+      width: '187px',
+      border: 'solid 1px #ccc',
+      padding: '5px'
+    };
+    var stripStyle = {
+      marginLeft: '5px'
     };
     return (
       <div id={this.props.id} style={styles} className={this.props.id}>
@@ -44,7 +55,7 @@ var ColorPicker = React.createClass({
                 onMouseMove={this.props.mouseMoveBlock}
                 onMouseUp={this.props.mouseUpBlock}
                 ref='canvasBlock'></canvas>
-        <canvas id='color-strip'
+        <canvas id='color-strip' style={stripStyle}
                 height={this.props.hS}
                 width={this.props.wS}
                 onClick={this.props.clickStrip}

@@ -12,7 +12,12 @@ var ColorLabel = React.createClass({
   },
   render: function () {
     var styles = {
-      backgroundColor: this.props.color
+      backgroundColor: this.props.color,
+      marginLeft: '15px',
+      position: 'relative',
+      height: '20px',
+      width: '40px',
+      border: 'none'
     };
     return (
       <div>
